@@ -34,7 +34,7 @@
     }
   },
   "scripts": {
-    "clean": "rmdir -r -force dist ; rmdir -r -force test/node/dist ; rmdir -r -force test/browser/bundle.js ; rmdir -r -force helpers",
+    "clean": "rmdir /s /q dist && rmdir /s /q test/node/dist && rmdir /s /q test/browser/bundle.js && rmdir /s /q helpers",
     "test": "npm run build && npm run test:node:build && concurrently -n node,typings,esmimports \"npm run test:node\" \"npm run test:typings\" \"npm run test:esmimports\"",
     "test:node:build": "tsc -p test/node",
     "test:node": "concurrently -n postgres,mysql,mssql,sqlite \"npm run test:node:postgres\" \"npm run test:node:mysql\" \"npm run test:node:mssql\" \"npm run test:node:sqlite\"",
@@ -52,8 +52,8 @@
     "test:esmimports": "node scripts/check-esm-imports.js",
     "test:esbuild": "esbuild --bundle --platform=node --external:pg-native dist/esm/index.js --outfile=/dev/null",
     "prettier": "prettier --write 'src/**/*.ts' 'test/**/*.ts'",
-    "build": "npm run clean ; concurrently -n esm,cjs \"npm run build:esm\" \"npm run build:cjs\" ; concurrently -n modulefix,docfix \"npm run script:module-fixup\" \"npm run script:copy-interface-doc\"",
-    "build:esm": "tsc -p tsconfig.json ; npm run script:add-deno-type-references",
+    "build": "npm run clean && concurrently -n esm,cjs \"npm run build:esm\" \"npm run build:cjs\" && concurrently -n modulefix,docfix \"npm run script:module-fixup\" \"npm run script:copy-interface-doc\"",
+    "build:esm": "tsc -p tsconfig.json && npm run script:add-deno-type-references",
     "build:cjs": "tsc -p tsconfig-cjs.json",
     "script:module-fixup": "node scripts/module-fixup.js",
     "script:copy-interface-doc": "node scripts/copy-interface-documentation.js",
